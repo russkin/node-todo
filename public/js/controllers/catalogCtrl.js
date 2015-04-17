@@ -1,14 +1,14 @@
-angular.module('todoController', [])
+angular.module('catalog.admin', [])
 
 	// inject the Todo service factory into our controller
-	.controller('mainController', ['$scope','$http','Todos', function($scope, $http, Todos) {
+	.controller('catalogCtrl', ['$scope','Todos', function($scope, Todos) {
 		$scope.formData = {};
 		$scope.loading = true;
 
 		// GET =====================================================================
 		// when landing on the page, get all todos and show them
 		// use the service to get all the todos
-		Todos.get()
+		Todos.list()
 			.success(function(data) {
 				$scope.todos = data;
 				$scope.loading = false;
@@ -45,6 +45,31 @@ angular.module('todoController', [])
 				.success(function(data) {
 					$scope.loading = false;
 					$scope.todos = data; // assign our new list of todos
+				});
+		};
+
+		// SEARCH ==================================================================
+		// search a todoes by name
+		$scope.searchCategory= function(text) {
+			$scope.loading = true;
+
+			Todos.search(text)
+				// if successful creation, call our get function to get all the new todos
+				.success(function(data) {
+					$scope.loading = false;
+					$scope.todos = data; // assign our new list of todos
+				});
+		};
+
+		// SHOW ====================================================================
+		// show a todo information
+		$scope.showTodo = function(id) {
+			$scope.loading = true;
+			
+			Todos.get(id)
+				.success(function(data) {
+					$scope.loading = false;
+					$scope.info = data;
 				});
 		};
 	}]);

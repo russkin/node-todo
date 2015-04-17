@@ -1,55 +1,22 @@
-var Todo = require('./models/todo');
-
-function getTodos(res){
-	Todo.find(function(err, todos) {
-
-			// if there is an error retrieving, send the error. nothing after res.send(err) will execute
-			if (err)
-				res.send(err)
-
-			res.json(todos); // return all todos in JSON format
-		});
-};
-
-module.exports = function(app) {
+module.exports = function(app, controller) {
+	'use strict';
 
 	// api ---------------------------------------------------------------------
-	// get all todos
-	app.get('/api/todos', function(req, res) {
+	// get a single todo
+	app.get('/api/todos/:todo_id', controller.get);
 
-		// use mongoose to get all todos in the database
-		getTodos(res);
-	});
+	// get all todos
+	app.get('/api/todos', controller.list);
 
 	// create todo and send back all todos after creation
-	app.post('/api/todos', function(req, res) {
-
-		// create a todo, information comes from AJAX request from Angular
-		Todo.create({
-			text : req.body.text,
-			done : false
-		}, function(err, todo) {
-			if (err)
-				res.send(err);
-
-			// get and return all the todos after you create another
-			getTodos(res);
-		});
-
-	});
+	app.post('/api/todos', controller.create, controller.list);
 
 	// delete a todo
-	app.delete('/api/todos/:todo_id', function(req, res) {
-		Todo.remove({
-			_id : req.params.todo_id
-		}, function(err, todo) {
-			if (err)
-				res.send(err);
+	app.delete('/api/todos/:todo_id', controller.delete, controller.list);
 
-			getTodos(res);
-		});
-	});
-
+	// get a single todo
+	app.get('/api/search/:text', controller.search);
+	
 	// application -------------------------------------------------------------
 	app.get('*', function(req, res) {
 		res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)

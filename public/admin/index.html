@@ -1,0 +1,126 @@
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="scotchTodo">
+<head>
+	<!-- META -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+	<title>Каталог продуктов</title>
+
+	<!-- SCROLLS -->
+	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"><!-- load bootstrap -->
+	<link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css"><!-- realy need? -->
+
+	<!-- SPELLS -->
+	<script src="/bower_components/angular/angular.min.js"></script><!-- load angular -->
+	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="/bower_components/bootstrap/js/tab.js"></script>
+
+	<script src="/js/controllers/catalogCtrl.js"></script> <!-- load up our controller -->
+	<script src="/js/services/todos.js"></script> <!-- load our todo service -->
+	<script src="/js/core.js"></script> <!-- load our main application -->
+
+</head>
+<!-- SET THE CONTROLLER -->
+<body ng-controller="catalogCtrl">
+	<div class="container">
+
+		<!-- HEADER AND TODO COUNT -->
+		<div class="jumbotron text-center ng-hide">
+			<h1>Моя ярмарка <span class="label label-info">{{ todos.length }}</span></h1>
+		</div>
+
+		<div class="row">
+		<div class="col-md-4">
+		<ul class="nav nav-pills">
+			<li role="presentation" class="active"><a href="#product" data-toggle="tab">Продукт</a></li>
+			<li role="presentation"><a href="#catalog" data-toggle="tab"><i class="fa fa-pencil fa-fw"></i> Каталог</a></li>
+			<li role="presentation"><a href="#settings" data-toggle="tab"><i class="fa fa-cog"></i> Настройки</a></li>
+		</ul>
+		</div>
+		</div>
+
+		<div class="row tab-content">
+			<div class="tab-pane" id="product">
+				<form role="form">
+					<div class="col-md-4">
+						<div class="form-group"></div>
+						<div class="form-group">
+							<input type="test" class="form-control" placeholder="Категория">
+						</div>
+						<div class="form-group">
+							<div class="input-group">
+								<input type="test" class="form-control" placeholder="Наименование товара">
+								<span class="input-group-btn">
+									<button class="btn btn-primary" type="button">Добавить</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="tab-pane active" id="catalog" ng-contoller="adminCatalog">
+				<form role="form">
+					<div class="col-md-4">
+						<div class="form-group"></div>
+						<div class="form-group">
+							<div class="input-group">
+								<input type="test" class="form-control" placeholder="Категория" ng-model="search_text">
+								<span class="input-group-btn">
+									<button class="btn btn-primary" type="submit" ng-click="searchCategory(search_text)">Поиск</button><!-- TODO^ replace to the search icon -->
+								</span>
+							</div>
+						</div>
+					</div>
+				</form>
+		<!-- TODO LIST -->
+		<div id="todo-list" class="row">
+			<div class="col-sm-4">
+
+				<!-- LOOP OVER THE TODOS IN $scope.todos -->
+				<div class="checkbox col-sm-12" ng-repeat="todo in todos">
+					<label ng-click="showTodo(todo._id)">
+						<input type="checkbox" ng-click="deleteTodo1(todo._id)"> {{ todo.text }}
+					</label>
+				</div>
+
+				<p class="text-center" ng-show="loading">
+					<span class="fa fa-spinner fa-spin fa-3x"></span>
+				</p>
+
+			</div>
+		</div>
+
+
+		<div id="catalog-item" class="row">
+			<div class="col-sm-12" ng-repeat="todo in info">
+				<div>{{todo._id}}</div>
+				<div>{{todo.text}}</div>
+			</div>
+		</div>
+
+		<!-- FORM TO CREATE TODOS -->
+		<!--
+		<div id="todo-form" class="row">
+			<div class="col-sm-8 col-sm-offset-2 text-center">
+				<form>
+					<div class="form-group">
+
+						<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.text">
+					</div>
+
+					<button type="submit" class="btn btn-primary btn-lg" ng-click="createTodo()">Add</button>
+				</form>
+			</div>
+		</div>
+		-->
+			</div>
+			<div class="tab-pane" id="settings">...</div>
+		</div>
+
+	</div>
+
+</body>
+</html>
