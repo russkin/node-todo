@@ -1,1 +1,1 @@
-angular.module('scotchTodo', ['catalog.admin', 'todoService']);
+angular.module('myFair', ['catalog.admin', 'todoService']);
